@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.get("/", getTuits);
 router.get("/:id", getTuitById);
+
 module.exports = router;
