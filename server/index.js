@@ -4,6 +4,10 @@ const morgan = require("morgan");
 const debug = require("debug")("tuit:server");
 
 const chalk = require("chalk");
+const {
+  notFoundHandler,
+  generalErrorMiddleware,
+} = require("./middleware/errors");
 
 const app = express();
 app.use(cors());
@@ -31,5 +35,8 @@ app.use((req, res, next) => {
   debug(chalk.green("REQUEST ARRIVED ʕง•ᴥ•ʔง"));
   next();
 });
+
+app.use(notFoundHandler);
+app.use(generalErrorMiddleware);
 
 module.exports = { initializeServer, app };
