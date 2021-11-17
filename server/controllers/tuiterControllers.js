@@ -35,7 +35,7 @@ const deleteTuit = async (req, res, next) => {
       debug(chalk.green("deleted item ʕ •ᴥ•ʔゝ☆ "));
       res.json(searchTuit);
     } else {
-      const error = new Error("Robot not found  (╯°□°）╯︵ ┻━┻");
+      const error = new Error("Tuit not found  (╯°□°）╯︵ ┻━┻");
       error.code = 404;
       next(error);
     }
@@ -45,8 +45,22 @@ const deleteTuit = async (req, res, next) => {
   }
 };
 
+const createTuit = async (req, res, next) => {
+  try {
+    const tuit = req.body;
+    const newTuit = await Tuit.create(tuit);
+    debug(chalk.green("created item"));
+    res.status(201).json(newTuit);
+  } catch (error) {
+    error.code = 400;
+    error.message = "fallo";
+    next(error);
+  }
+};
+
 module.exports = {
   getTuits,
   getTuitById,
   deleteTuit,
+  createTuit,
 };
