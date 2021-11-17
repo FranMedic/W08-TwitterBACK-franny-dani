@@ -9,7 +9,8 @@ const getTuits = async (req, res) => {
 };
 
 const getTuitById = async (req, res, next) => {
-  const { id } = req.paramas;
+  const { id } = req.params;
+
   try {
     const searchTuit = await Tuit.findById(id);
     if (searchTuit) {
@@ -26,7 +27,26 @@ const getTuitById = async (req, res, next) => {
   }
 };
 
+const deleteTuit = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const searchTuit = await Tuit.findByIdAndDelete(id);
+    if (searchTuit) {
+      debug(chalk.green("deleted item ʕ •ᴥ•ʔゝ☆ "));
+      res.json(searchTuit);
+    } else {
+      const error = new Error("Robot not found  (╯°□°）╯︵ ┻━┻");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    next(error);
+  }
+};
+
 module.exports = {
   getTuits,
   getTuitById,
+  deleteTuit,
 };
