@@ -1,7 +1,19 @@
 const Tuit = require("../../database/models/tuit");
-const { getTuits, getTuitById, deleteTuit } = require("./tuiterControllers");
+const {
+  getTuits,
+  getTuitById,
+  deleteTuit,
+  createTuit,
+} = require("./tuiterControllers");
 
 jest.mock("../../database/models/tuit");
+
+const mockResponse = () => {
+  const res = {};
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res;
+};
 
 describe("Given a getTuits function", () => {
   describe("When it receives an object res", () => {
@@ -157,6 +169,51 @@ describe("Given a deleteTuit function", () => {
 
       expect(next).toHaveBeenCalledWith(error);
       expect(error).toHaveProperty("code");
+    });
+  });
+});
+
+describe("Given a createTuit function", () => {
+  describe("When it receives a req object with a body, a res objetc and with and a next function", () => {
+    test("Then it should invoke the method json of res with the Robot.Create", async () => {
+      const tuit = {
+        text: "oleolehh lo caracoleehh",
+        likes: 7,
+        date: "2021-11-17T18:40:55.096Z",
+        id: "61954cb7c24554beef209bc0",
+      };
+
+      const req = {
+        body: tuit,
+      };
+
+      Tuit.create = jest.fn().mockResolvedValue(tuit);
+      const res = mockResponse();
+      const next = () => {};
+
+      await createTuit(req, res, next);
+
+      expect(Tuit.create).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith(tuit);
+    });
+  });
+  describe("And createTuit rejects", () => {
+    test("Then it should invoke next function with the error rejected", async () => {
+      const error = {};
+      Tuit.create = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: 0,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await createTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+      expect(error.code).toBe(400);
     });
   });
 });
