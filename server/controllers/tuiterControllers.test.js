@@ -37,10 +37,10 @@ describe("Given a getTuitById function", () => {
   describe("When it recieves a req with and id 10, a res object and a next function", () => {
     test("Then it should invoke Tuit.findById with a 10", async () => {
       Tuit.findById = jest.fn().mockResolvedValue({});
-      const idTuit = 10;
+      const id = 10;
       const req = {
         params: {
-          idTuit,
+          id,
         },
       };
       const res = {
@@ -50,7 +50,7 @@ describe("Given a getTuitById function", () => {
 
       await getTuitById(req, res, next);
 
-      expect(Tuit.findById).toHaveBeenCalledWith(idTuit);
+      expect(Tuit.findById).toHaveBeenCalledWith(id);
     });
   });
 
@@ -76,7 +76,7 @@ describe("Given a getTuitById function", () => {
 
   describe("and Tuit.findById resolves to fakeTuit", () => {
     test("Then it should invoke res.json with the object fakeTuit", async () => {
-      const idTuit = 10;
+      const id = 10;
       const fakeTuit = {
         text: "oleolehh lo caracoleehh",
         likes: 7,
@@ -87,7 +87,7 @@ describe("Given a getTuitById function", () => {
       Tuit.findById = jest.fn().mockResolvedValue(fakeTuit);
       const req = {
         params: {
-          idTuit,
+          id,
         },
       };
       const res = {
