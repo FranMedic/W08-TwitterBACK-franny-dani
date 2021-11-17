@@ -8,6 +8,25 @@ const getTuits = async (req, res) => {
   res.json(tuits);
 };
 
+const getTuitById = async (req, res, next) => {
+  const { id } = req.paramas;
+  try {
+    const searchTuit = await Tuit.findById(id);
+    if (searchTuit) {
+      debug(chalk.green("loaded tuit ʕ •ᴥ•ʔゝ☆"));
+      res.json(searchTuit);
+    } else {
+      const error = new Error("Tuit not found (╯°□°）╯︵ ┻━┻");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    next(error);
+  }
+};
+
 module.exports = {
   getTuits,
+  getTuitById,
 };
