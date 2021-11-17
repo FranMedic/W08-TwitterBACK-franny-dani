@@ -8,6 +8,7 @@ const {
   notFoundHandler,
   generalErrorMiddleware,
 } = require("./middleware/errors");
+const tuiterRoutes = require("./routes/tuiterRoutes");
 
 const app = express();
 app.use(cors());
@@ -35,6 +36,8 @@ app.use((req, res, next) => {
   debug(chalk.green("REQUEST ARRIVED ʕง•ᴥ•ʔง"));
   next();
 });
+
+app.use("/tuitah", tuiterRoutes);
 
 app.use(notFoundHandler);
 app.use(generalErrorMiddleware);
