@@ -3,6 +3,7 @@ const {
   getTuits,
   getTuitById,
   deleteTuit,
+  createTuit,
 } = require("../controllers/tuiterControllers");
 
 const router = express.Router();
