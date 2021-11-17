@@ -36,6 +36,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/tuitah", tuitRoutes);
+
 app.use(notFoundHandler);
 app.use(generalErrorMiddleware);
 
