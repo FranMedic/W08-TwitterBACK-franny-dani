@@ -35,7 +35,7 @@ const deleteTuit = async (req, res, next) => {
       debug(chalk.green("deleted item ʕ •ᴥ•ʔゝ☆ "));
       res.json(searchTuit);
     } else {
-      const error = new Error("Robot not found  (╯°□°）╯︵ ┻━┻");
+      const error = new Error("Tuit not found  (╯°□°）╯︵ ┻━┻");
       error.code = 404;
       next(error);
     }

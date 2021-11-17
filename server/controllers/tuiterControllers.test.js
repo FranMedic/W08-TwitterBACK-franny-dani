@@ -1,5 +1,5 @@
 const Tuit = require("../../database/models/tuit");
-const { getTuits, getTuitById } = require("./tuiterControllers");
+const { getTuits, getTuitById, deleteTuit } = require("./tuiterControllers");
 
 jest.mock("../../database/models/tuit");
 
@@ -97,6 +97,66 @@ describe("Given a getTuitById function", () => {
       await getTuitById(req, res);
 
       expect(res.json).toHaveBeenCalledWith(fakeTuit);
+    });
+  });
+});
+
+describe("Given a deleteTuit function", () => {
+  describe("When it receives a req with an id 10, a res object and a next function", () => {
+    test("Then it should invoke Tuit.findByIdandDelete with the id 10", async () => {
+      const id = 10;
+      Tuit.findByIdAndDelete = jest.fn().mockResolvedValue({});
+      const req = {
+        params: {
+          id,
+        },
+      };
+      const res = {
+        json: jest.fn(),
+      };
+      const next = () => {};
+
+      await deleteTuit(req, res, next);
+
+      expect(Tuit.findByIdAndDelete).toHaveBeenCalledWith(id);
+    });
+  });
+  describe("And Tuit.findByIdAndDelete rejects", () => {
+    test("Then it should invoke next function with the error rejected", async () => {
+      const error = {};
+      Tuit.findByIdAndDelete = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: 0,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await deleteTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+      expect(error.code).toBe(400);
+    });
+  });
+  describe("and Tuit.findByIdAndDelete resolves and id undefined", () => {
+    test("then it should invoke next function with the error created", async () => {
+      const error = new Error("Tuit not found  (╯°□°）╯︵ ┻━┻");
+      error.code = 404;
+      Tuit.findByIdAndDelete = jest.fn();
+      const req = {
+        params: {
+          id: 0,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await deleteTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
     });
   });
 });
