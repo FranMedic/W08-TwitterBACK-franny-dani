@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const debug = require("debug")("redS:server");
+const debug = require("debug")("tuit:server");
 
 const chalk = require("chalk");
 
@@ -11,7 +11,7 @@ app.use(cors());
 const initializeServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
-      debug(chalk.magentaBright(`Listen to port: ${port}`));
+      debug(chalk.green(`Listen to port: ${port}`));
     });
 
     server.on("error", (error) => {
